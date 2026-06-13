@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tính Vận Tốc - Bản Cập Nhật</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f3; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); width: 360px; }
+        h2 { text-align: center; color: #2c3e50; margin-top: 0; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; color: #34495e; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { width: 100%; padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        button:hover { background-color: #2980b9; }
+        .result { margin-top: 20px; padding: 12px; border-radius: 6px; text-align: center; font-weight: bold; font-size: 16px; min-height: 22px; display: none; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .loading { background-color: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>MÁY TÍNH VẬN TỐC</h2>
+    
+    <div class="form-group">
+        <label>Đơn vị quãng đường:</label>
+        <select id="donViS">
+            <option value="1">Mét (m)</option>
+            <option value="2">Kilômét (km)</option>
+        </select>
+        <label style="margin-top: 10px;">Nhập quãng đường s:</label>
+        <input type="number" id="quangDuong" step="any" placeholder="Nhập giá trị s">
+    </div>
+
+    <div class="form-group">
+        <label>Đơn vị thời gian:</label>
+        <select id="donViT">
+            <option value="1">Giây (s)</option>
+            <option value="2">Giờ (h)</option>
+        </select>
+        <label style="margin-top: 10px;">Nhập thời gian t:</label>
+        <input type="number" id="thoiGian" step="any" placeholder="Nhập giá trị t">
+    </div>
+
+    <button onclick="batDauTinh()">TÍNH VẬN TỐC</button>
+
+    <div id="manHinhHienThi" class="result"></div>
+</div>
+
+<script>
+// Hàm trì hoãn thời gian giống như sleep_for trong C++
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function batDauTinh() {
+    // Lấy giá trị từ giao diện (luachon, luachon1, s, t)
+    let luachon = parseInt(document.getElementById('donViS').value);
+    let luachon1 = parseInt(document.getElementById('donViT').value);
+    let s = parseFloat(document.getElementById('quangDuong').value);
+    let t = parseFloat(document.getElementById('thoiGian').value);
+    
+    let manHinh = document.getElementById('manHinhHienThi');
+    manHinh.style.display = "block"; // Hiện hộp thông báo
+
+    // --- KIỂM TRA LỖI: if ( t <= 0 || s <= 0) ---
+    if (isNaN(s) || isNaN(t) || t <= 0 || s <= 0) {
+        manHinh.className = "result error";
+        manHinh.innerText = "Gia tri khong ton tai";
+        return; // Tương đương lệnh exit(0); chặn đứng toàn bộ code phía dưới
+    }
+
+    // --- NHÁNH ELSE: Nếu dữ liệu đúng, chạy hiệu ứng đợi ---
+    manHinh.className = "result loading";
+    manHinh.innerText = "Vui long doi trong giay lat... ";
+    
+    // std::this_thread::sleep_for(std::chrono::seconds(2));
+    await sleep(2000); 
+
+    let v = 0;
+
+    // --- SO SÁNH ĐIỀU KIỆN ĐƠN VỊ ĐỂ XUẤT KẾT QUẢ ---
+    // if (luachon == 1 && luachon1 == 1)
+    if (luachon === 1 && luachon1 === 1) {
+        v = s / t;
+        manHinh.className = "result success";
+        manHinh.innerText = "Van toc cua ban la: " + v.toFixed(2) + " m/s";
+    }
+    // else if (luachon == 2 && luachon1 == 2)
+    else if (luachon === 2 && luachon1 === 2) {
+        v = s / t;
+        manHinh.className = "result success";
+        manHinh.innerText = "Van toc cua ban la: " + v.toFixed(2) + " km/h";
+    }
+    // else (Khác đơn vị)
+    else {
+        manHinh.className = "result error";
+        manHinh.innerText = "khong the tinh van toc voi don vi khac nhau!!!";
+    }
+}
+</script>
+
+</body>
+</html>
