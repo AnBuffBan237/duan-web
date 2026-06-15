@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Máy Tính Vận Tốc</title>
+    <style>
+        /* CSS: Giao diện với đổ bóng và màu sắc chuyên nghiệp */
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('background.jpg') no-repeat center center fixed; /* Thay link ảnh của bạn vào đây */
+            background-size: cover;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+        }
+
+        .container {
+            background: rgba(20, 30, 48, 0.85);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); /* Đổ bóng tạo chiều sâu */
+            width: 350px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h2 { text-align: center; margin-bottom: 25px; }
+
+        label { display: block; margin-top: 15px; margin-bottom: 5px; font-size: 0.9em; }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 25px;
+            border-radius: 8px;
+            border: none;
+            background: #e67e22; /* Màu cam nổi bật */
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #d35400; }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>MÁY TÍNH VẬN TỐC</h2>
+
+    <label>Quãng đường (s):</label>
+    <input type="number" id="s" placeholder="Nhập giá trị s">
+    <select id="unit_s">
+        <option value="m">Mét (m)</option>
+        <option value="km">Kilômét (km)</option>
+    </select>
+
+    <label>Thời gian (t):</label>
+    <input type="number" id="t" placeholder="Nhập giá trị t">
+    <select id="unit_t">
+        <option value="s">Giây (s)</option>
+        <option value="h">Giờ (h)</option>
+    </select>
+
+    <button onclick="tinhVanToc()">TÍNH VẬN TỐC</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function tinhVanToc() {
+        let s = parseFloat(document.getElementById('s').value);
+        let t = parseFloat(document.getElementById('t').value);
+        let us = document.getElementById('unit_s').value;
+        let ut = document.getElementById('unit_t').value;
+        let resDiv = document.getElementById('result');
+
+        if (isNaN(s) || isNaN(t) || t <= 0) {
+            alert("Vui lòng nhập số hợp lệ!");
+            return;
+        }
+
+        let v = s / t;
+        let donVi = (us === "m" ? "m/" : "km/") + (ut === "s" ? "s" : "h");
+
+        resDiv.style.display = 'block';
+        resDiv.innerHTML = `Vận tốc: <strong>${v.toFixed(2)} ${donVi}</strong>`;
+    }
+</script>
+
+</body>
+</html>
